@@ -16,7 +16,7 @@
 
 #include "mediapipe/framework/formats/landmark.pb.h"
 
-static const char* kLandmarksOutputStream = "iris_landmarks";
+static const char* kLandmarksOutputStream = "face_landmarks_with_iris";
 
 @implementation IrisTrackingViewController {
   /// Input side packet for focal length parameter.
@@ -53,10 +53,10 @@ static const char* kLandmarksOutputStream = "iris_landmarks";
     const auto& landmarks = packet.Get<::mediapipe::NormalizedLandmarkList>();
     NSLog(@"[TS:%lld] Number of landmarks on iris: %d", packet.Timestamp().Value(),
           landmarks.landmark_size());
-    for (int i = 0; i < landmarks.landmark_size(); ++i) {
-      NSLog(@"\tLandmark[%d]: (%f, %f, %f)", i, landmarks.landmark(i).x(),
-            landmarks.landmark(i).y(), landmarks.landmark(i).z());
-    }
+//    for (int i = 0; i < landmarks.landmark_size(); ++i) {
+//      NSLog(@"\tLandmark[%d]: (%f, %f, %f)", i, landmarks.landmark(i).x(),
+//            landmarks.landmark(i).y(), landmarks.landmark(i).z());
+//    }
   }
 }
 
