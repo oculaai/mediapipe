@@ -18,6 +18,7 @@
     "mediapipe/examples/ios/handtrackinggpu",
     "mediapipe/examples/ios/holistictrackinggpu",
     "mediapipe/examples/ios/iristracker",
+    "mediapipe/examples/ios/iristrackerexample",
     "mediapipe/examples/ios/iristrackinggpu",
     "mediapipe/examples/ios/objectdetectioncpu",
     "mediapipe/examples/ios/objectdetectiongpu",

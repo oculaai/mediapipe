@@ -7,7 +7,7 @@
 static NSString* const kGraphName = @"iris_tracking_gpu";
 static const char* kInputStream = "input_video";
 static const char* kOutputStream = "output_video";
-static const char* kLandmarksOutputStream = "iris_landmarks";
+static const char* kLandmarksOutputStream = "eye_landmarks_with_iris";
 static const char* kVideoQueueLabel = "com.google.mediapipe.example.videoQueue";
 
 @interface IrisTracker() <MPPGraphDelegate> 
@@ -94,9 +94,9 @@ static const char* kVideoQueueLabel = "com.google.mediapipe.example.videoQueue";
 // Receives CVPixelBufferRef from the MediaPipe graph. Invoked on a MediaPipe worker thread.
 - (void)mediapipeGraph:(MPPGraph*)graph
   didOutputPixelBuffer:(CVPixelBufferRef)pixelBuffer
-            fromStream:(const std::string&)streamName {
+            fromStream:(const std::string&)streamName timestamp:(const mediapipe::Timestamp &)timestamp {
       if (streamName == kOutputStream) {
-          [_delegate irisTracker: self didOutputPixelBuffer: pixelBuffer];
+          [_delegate irisTracker: self didOutputPixelBuffer: pixelBuffer timestamp:timestamp.Value()];
       }
 }
 
@@ -107,11 +107,6 @@ static const char* kVideoQueueLabel = "com.google.mediapipe.example.videoQueue";
     if (streamName == kLandmarksOutputStream) {
         if (packet.IsEmpty()) { return; }
         const auto& landmarks = packet.Get<::mediapipe::NormalizedLandmarkList>();
-        
-        //        for (int i = 0; i < landmarks.landmark_size(); ++i) {
-        //            NSLog(@"\tLandmark[%d]: (%f, %f, %f)", i, landmarks.landmark(i).x(),
-        //                  landmarks.landmark(i).y(), landmarks.landmark(i).z());
-        //        }
         NSMutableArray<Landmark *> *result = [NSMutableArray array];
         for (int i = 0; i < landmarks.landmark_size(); ++i) {
             Landmark *landmark = [[Landmark alloc] initWithX:landmarks.landmark(i).x()
@@ -119,14 +114,15 @@ static const char* kVideoQueueLabel = "com.google.mediapipe.example.videoQueue";
                                                            z:landmarks.landmark(i).z()];
             [result addObject:landmark];
         }
-        [_delegate irisTracker: self didOutputLandmarks: result];
+        [_delegate irisTracker: self didOutputLandmarks: result timestamp:packet.Timestamp().Value()];
     }
 }
 
-- (void)processVideoFrame:(CVPixelBufferRef)imageBuffer {
+- (void)processVideoFrame:(CVPixelBufferRef)imageBuffer timestamp:(long)timestamp {
     [self.mediapipeGraph sendPixelBuffer:imageBuffer
                               intoStream:kInputStream
-                              packetType:MPPPacketTypePixelBuffer];
+                              packetType:MPPPacketTypePixelBuffer
+                               timestamp:mediapipe::Timestamp(timestamp)];
 }
 
 @end

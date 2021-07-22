@@ -5,14 +5,14 @@
 @class IrisTracker;
 
 @protocol TrackerDelegate <NSObject>
-- (void)irisTracker: (IrisTracker*)irisTracker didOutputLandmarks: (NSArray<Landmark *> *)landmarks;
-- (void)irisTracker: (IrisTracker*)irisTracker didOutputPixelBuffer: (CVPixelBufferRef)pixelBuffer;
+- (void)irisTracker: (IrisTracker*)irisTracker didOutputLandmarks:(NSArray<Landmark *> *)landmarks timestamp:(long)timestamp;
+- (void)irisTracker: (IrisTracker*)irisTracker didOutputPixelBuffer:(CVPixelBufferRef)pixelBuffer timestamp:(long)timestamp;
 @end
 
 @interface IrisTracker : NSObject
 - (instancetype)init;
 - (void)startGraph;
-- (void)processVideoFrame:(CVPixelBufferRef)imageBuffer;
+- (void)processVideoFrame:(CVPixelBufferRef)imageBuffer timestamp:(long)timestamp;
 @property (weak, nonatomic) id <TrackerDelegate> delegate;
 @end
 

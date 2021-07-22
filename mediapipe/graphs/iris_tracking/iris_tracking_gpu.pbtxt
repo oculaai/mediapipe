@@ -161,3 +161,10 @@ node {
   input_stream: "iris_landmarks"
   output_stream: "face_landmarks_with_iris"
 }
+
+node {
+  calculator: "ConcatenateNormalizedLandmarkListCalculator"
+  input_stream: "refined_eye_landmarks"
+  input_stream: "iris_landmarks"
+  output_stream: "eye_landmarks_with_iris"
+}

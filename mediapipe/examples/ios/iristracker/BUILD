@@ -30,6 +30,7 @@ objc_library(
         "//mediapipe/modules/face_landmark:face_landmark.tflite",
         "//mediapipe/modules/iris_landmark:iris_landmark.tflite",
     ],
+    visibility = ["//mediapipe:__subpackages__"],
     deps = [
         "//mediapipe/objc:mediapipe_framework_ios",
         "//mediapipe/objc:mediapipe_input_sources_ios",
