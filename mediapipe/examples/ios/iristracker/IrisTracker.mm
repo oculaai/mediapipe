@@ -1,7 +1,5 @@
 #import "IrisTracker.h"
 #import "mediapipe/objc/MPPGraph.h"
-#import "mediapipe/objc/MPPCameraInputSource.h"
-#import "mediapipe/objc/MPPLayerRenderer.h"
 #include "mediapipe/framework/formats/landmark.pb.h"
 
 static NSString* const kGraphName = @"iris_tracking_gpu";
@@ -62,14 +60,14 @@ static const char* kVideoQueueLabel = "com.google.mediapipe.example.videoQueue";
     return newGraph;
 }
 
-- (instancetype)init
+- (instancetype)initWithMaxFramesInFlight:(int)maxFramesInFlight
 {
     self = [super init];
     if (self) {
         self.mediapipeGraph = [[self class] loadGraphFromResource:kGraphName];
         self.mediapipeGraph.delegate = self;
         // Set maxFramesInFlight to a small value to avoid memory contention for real-time processing.
-        self.mediapipeGraph.maxFramesInFlight = 2;
+        self.mediapipeGraph.maxFramesInFlight = maxFramesInFlight;
         
         _focal_length_side_packet =
             mediapipe::MakePacket<std::unique_ptr<float>>(absl::make_unique<float>(0.0));

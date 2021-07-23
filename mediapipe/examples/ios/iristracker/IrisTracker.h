@@ -10,7 +10,7 @@
 @end
 
 @interface IrisTracker : NSObject
-- (instancetype)init;
+- (instancetype)initWithMaxFramesInFlight:(int)maxFramesInFlight;
 - (void)startGraph;
 - (void)processVideoFrame:(CVPixelBufferRef)imageBuffer timestamp:(long)timestamp;
 @property (weak, nonatomic) id <TrackerDelegate> delegate;
